@@ -1,6 +1,5 @@
 module Lib
-  ( someFunc
-  , readGrid
+  ( readGrid
   , showGrid
   , showGridWithPossibilities
   , solve
@@ -11,9 +10,6 @@ import qualified Data.Char
 import Data.Function (on)
 import qualified Data.List
 import qualified Data.List.Split
-
-someFunc :: IO ()
-someFunc = putStrLn "someFunc"
 
 data Cell
   = Fixed Int
