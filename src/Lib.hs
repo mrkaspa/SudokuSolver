@@ -106,7 +106,7 @@ subGridsToRows =
   concatMap
     (\rows ->
        let [r1, r2, r3] = map (Data.List.Split.chunksOf 3) rows
-        in zipWith3 (\a b c -> a ++ b ++ c) r1 r2 r3) .
+       in zipWith3 (\a b c -> a ++ b ++ c) r1 r2 r3) .
   Data.List.Split.chunksOf 3
 
 nextGrids :: Grid -> (Grid, Grid)
@@ -116,7 +116,7 @@ nextGrids grid =
         Data.List.minimumBy (compare `on` (possibilityCount . snd)) .
         filter (isPossible . snd) . zip [0 ..] . concat $
         grid
-   in (replace2D i first grid, replace2D i rest grid)
+  in (replace2D i first grid, replace2D i rest grid)
   where
     isPossible (Possible _) = True
     isPossible _ = False
@@ -128,7 +128,7 @@ nextGrids grid =
     replace2D :: Int -> a -> [[a]] -> [[a]]
     replace2D i v =
       let (x, y) = (i `quot` 9, i `mod` 9)
-       in replace x (replace y (const v))
+      in replace x (replace y (const v))
     replace p f xs =
       [ if i == p
         then f x
@@ -148,7 +148,7 @@ isGridInvalid grid =
     isInvalidRow row =
       let fixeds = [x | Fixed x <- row]
           emptyPossibles = [x | Possible x <- row, null x]
-       in hasDups fixeds || not (null emptyPossibles)
+      in hasDups fixeds || not (null emptyPossibles)
     hasDups l = hasDups' l []
     hasDups' [] _ = False
     hasDups' (y:ys) xs
@@ -163,4 +163,4 @@ solve grid = pruneGrid grid >>= solve'
       | isGridFilled g = Just g
       | otherwise =
         let (grid1, grid2) = nextGrids g
-         in solve grid1 <|> solve grid2
+        in solve grid1 <|> solve grid2
