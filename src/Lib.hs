@@ -92,19 +92,18 @@ pruneGrid'' grid =
     .   subGridsToRows
 
 recPruning :: (Grid -> Maybe Grid) -> Grid -> Maybe Grid
-recPruning f x = f x >>= \x' -> if x' == x then return x else recPruning f x'
+recPruning gridSolver x =
+  gridSolver x >>= \x' -> if x' == x then return x else recPruning gridSolver x'
 
-pruneGrid :: Grid -> Maybe Grid
-pruneGrid = recPruning pruneGrid'
+pruneGridSolver :: Grid -> Maybe Grid
+pruneGridSolver = recPruning pruneGrid'
 
 subGridsToRows :: Grid -> Grid
-subGridsToRows =
-  concatMap
-      (\rows ->
-        let [r1, r2, r3] = map (Data.List.Split.chunksOf 3) rows
-        in  zipWith3 (\a b c -> a ++ b ++ c) r1 r2 r3
-      )
-    . Data.List.Split.chunksOf 3
+subGridsToRows = concatMap transponseByThree . Data.List.Split.chunksOf 3
+ where
+  transponseByThree threeRows =
+    let [r1, r2, r3] = map (Data.List.Split.chunksOf 3) threeRows
+    in  zipWith3 (\a b c -> a ++ b ++ c) r1 r2 r3
 
 nextGrids :: Grid -> (Grid, Grid)
 nextGrids grid =
@@ -148,7 +147,7 @@ isGridInvalid grid =
                        | otherwise   = hasDups' ys (y : xs)
 
 solve :: Grid -> Maybe Grid
-solve grid = pruneGrid grid >>= solve'
+solve grid = pruneGridSolver grid >>= solve'
  where
   solve' g
     | isGridInvalid g
